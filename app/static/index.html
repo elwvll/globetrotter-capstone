@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GlobeTrotter</title>
+<style>
+  :root{--bg:#f6f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#2563eb;--border:#e5e7eb}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text)}
+  header{background:var(--primary);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+  header h1{margin:0;font-size:1.3rem}
+  main{max-width:900px;margin:20px auto;padding:0 16px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px}
+  .tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .tab{padding:8px 16px;border:1px solid var(--border);background:var(--card);border-radius:20px;cursor:pointer;font-size:.95rem}
+  .tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+  input,button{font:inherit;padding:8px 10px;border:1px solid var(--border);border-radius:8px}
+  input{min-width:0}
+  button{background:var(--primary);color:#fff;border-color:var(--primary);cursor:pointer}
+  button.light{background:#fff;color:var(--primary)}
+  button:disabled{opacity:.6}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .row input{flex:1 1 140px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  .tag{display:inline-block;background:#eef2ff;color:#3730a3;border-radius:12px;padding:2px 9px;font-size:.78rem;margin:2px 4px 2px 0}
+  .muted{color:var(--muted);font-size:.9rem}
+  h3{margin:0 0 4px}
+  #msg{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 16px;border-radius:8px;display:none;max-width:90%}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<header>
+  <h1>GlobeTrotter</h1>
+  <div id="userbox"></div>
+</header>
+
+<main>
+  <div id="authbox" class="card">
+    <h3>Welcome</h3>
+    <p class="muted">Search destinations without an account. Log in to get recommendations and save trips.</p>
+    <div class="row">
+      <input id="a_user" placeholder="Username">
+      <input id="a_pass" type="password" placeholder="Password">
+      <input id="a_prefs" placeholder="Interests (register only): beach, food">
+    </div>
+    <div class="row">
+      <button onclick="doLogin()">Log in</button>
+      <button class="light" onclick="doRegister()">Register</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="dest">Destinations</div>
+    <div class="tab" data-tab="rec">For you</div>
+    <div class="tab" data-tab="trips">My trips</div>
+  </div>
+
+  <section id="tab-dest">
+    <div class="card">
+      <div class="row">
+        <input id="s_q" placeholder="Search (e.g. paris)">
+        <input id="s_tag" placeholder="Tag (e.g. beach)">
+        <input id="s_cont" placeholder="Continent (e.g. Europe)">
+        <input id="s_cost" type="number" placeholder="Max cost/day">
+        <button onclick="searchDest()">Search</button>
+      </div>
+    </div>
+    <div id="dest-list" class="grid"></div>
+  </section>
+
+  <section id="tab-rec" class="hidden">
+    <div id="rec-list" class="grid"></div>
+  </section>
+
+  <section id="tab-trips" class="hidden">
+    <div class="card">
+      <h3>Create a trip</h3>
+      <div class="row">
+        <input id="t_title" placeholder="Trip title">
+        <input id="t_dests" placeholder="Destinations (comma separated)">
+      </div>
+      <div class="row">
+        <input id="t_start" type="date">
+        <input id="t_end" type="date">
+        <button onclick="createTrip()">Save trip</button>
+      </div>
+    </div>
+    <div id="trip-list"></div>
+  </section>
+</main>
+
+<div id="msg"></div>
+
+<script>
+let token = localStorage.getItem('gt_token') || '';
+let username = localStorage.getItem('gt_user') || '';
+const $ = s => document.querySelector(s);
+
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function toast(text){
+  const m = $('#msg'); m.textContent = text; m.style.display = 'block';
+  clearTimeout(toast.t); toast.t = setTimeout(() => m.style.display = 'none', 3500);
+}
+
+async function api(path, method = 'GET', body){
+  const headers = {};
+  if (body) headers['Content-Type'] = 'application/json';
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  const res = await fetch(path, { method, headers, body: body ? JSON.stringify(body) : undefined });
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) throw new Error((data && (data.error || data.message)) || 'Request failed (' + res.status + ')');
+  return data;
+}
+
+function renderUser(){
+  const box = $('#userbox');
+  if (token){
+    box.innerHTML = 'Hi, ' + esc(username) + ' <button class="light" onclick="logout()">Log out</button>';
+    $('#authbox').classList.add('hidden');
+  } else {
+    box.innerHTML = '';
+    $('#authbox').classList.remove('hidden');
+  }
+}
+
+async function doLogin(){
+  try {
+    const u = $('#a_user').value.trim(), p = $('#a_pass').value;
+    const data = await api('/login', 'POST', { username: u, password: p });
+    token = data.token; username = u;
+    localStorage.setItem('gt_token', token); localStorage.setItem('gt_user', username);
+    renderUser(); toast('Logged in');
+  } catch (e) { toast(e.message); }
+}
+
+async function doRegister(){
+  try {
+    const u = $('#a_user').value.trim(), p = $('#a_pass').value;
+    const prefs = $('#a_prefs').value.split(',').map(s => s.trim()).filter(Boolean);
+    await api('/register', 'POST', { username: u, password: p, preferences: prefs });
+    toast('Registered!');
+    await doLogin();
+  } catch (e) { toast(e.message); }
+}
+
+function logout(){
+  token = ''; username = '';
+  localStorage.removeItem('gt_token'); localStorage.removeItem('gt_user');
+  renderUser(); $('#rec-list').innerHTML = ''; $('#trip-list').innerHTML = '';
+}
+
+function destCard(x){
+  const d = typeof x === 'string' ? { name: x } : x;
+  const tags = (d.tags || []).map(t => '<span class="tag">' + esc(t) + '</span>').join('');
+  const cost = d.avg_cost_per_day != null ? '<div class="muted">~$' + esc(d.avg_cost_per_day) + ' / day</div>' : '';
+  return '<div class="card"><h3>' + esc(d.name) + '</h3>' +
+    '<div class="muted">' + esc(d.country || '') + (d.continent ? ' · ' + esc(d.continent) : '') + '</div>' +
+    '<p>' + esc(d.description || '') + '</p>' + tags + cost +
+    '<div style="margin-top:10px"><button class="light" data-name="' + esc(d.name) + '" onclick="addToTrip(this.dataset.name)">+ Add to trip</button></div></div>';
+}
+
+async function searchDest(){
+  const p = new URLSearchParams();
+  const q = $('#s_q').value.trim(), tag = $('#s_tag').value.trim(),
+        cont = $('#s_cont').value.trim(), cost = $('#s_cost').value.trim();
+  if (q) p.set('q', q); if (tag) p.set('tag', tag);
+  if (cont) p.set('continent', cont); if (cost) p.set('max_cost', cost);
+  try {
+    const list = await api('/destinations?' + p.toString());
+    $('#dest-list').innerHTML = list.length ? list.map(destCard).join('') : '<p class="muted">No destinations found.</p>';
+  } catch (e) { toast(e.message); }
+}
+
+function addToTrip(name){
+  const el = $('#t_dests');
+  el.value = el.value ? el.value + ', ' + name : name;
+  toast(name + ' added to your trip form');
+}
+
+async function loadRec(){
+  if (!token){ $('#rec-list').innerHTML = '<p class="muted">Log in to see recommendations.</p>'; return; }
+  try {
+    const data = await api('/recommendations');
+    const list = Array.isArray(data) ? data : (data.recommendations || []);
+    $('#rec-list').innerHTML = list.length ? list.map(destCard).join('') : '<p class="muted">No recommendations yet.</p>';
+  } catch (e) { toast(e.message); }
+}
+
+async function loadTrips(){
+  if (!token){ $('#trip-list').innerHTML = '<p class="muted">Log in to see your trips.</p>'; return; }
+  try {
+    const data = await api('/itineraries');
+    const list = Array.isArray(data) ? data : (data.itineraries || []);
+    $('#trip-list').innerHTML = list.length ? list.map(t =>
+      '<div class="card"><h3>' + esc(t.title) + '</h3>' +
+      '<div class="muted">' + esc(t.start_date || '') + ' → ' + esc(t.end_date || '') + '</div>' +
+      '<div>' + (t.destinations || []).map(d => '<span class="tag">' + esc(d) + '</span>').join('') + '</div></div>'
+    ).join('') : '<p class="muted">No trips yet.</p>';
+  } catch (e) { toast(e.message); }
+}
+
+async function createTrip(){
+  if (!token){ toast('Please log in first'); return; }
+  try {
+    await api('/itineraries', 'POST', {
+      title: $('#t_title').value.trim(),
+      destinations: $('#t_dests').value.split(',').map(s => s.trim()).filter(Boolean),
+      start_date: $('#t_start').value,
+      end_date: $('#t_end').value
+    });
+    toast('Trip saved'); $('#t_title').value = ''; $('#t_dests').value = '';
+    loadTrips();
+  } catch (e) { toast(e.message); }
+}
+
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  ['dest', 'rec', 'trips'].forEach(n => $('#tab-' + n).classList.toggle('hidden', n !== t.dataset.tab));
+  if (t.dataset.tab === 'rec') loadRec();
+  if (t.dataset.tab === 'trips') loadTrips();
+});
+
+renderUser();
+searchDest();
+</script>
+</body>
+</html>

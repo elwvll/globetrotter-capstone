@@ -15,6 +15,6 @@ COPY . .
 
 # Expose the port the app runs on
 EXPOSE 5000
-
+ENV PYTHONPATH=/globetrotter
 # Run the application
-CMD ["python", "app/main.py"]
+CMD ["python", "-m", "app.main"]

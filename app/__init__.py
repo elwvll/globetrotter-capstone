@@ -29,4 +29,8 @@ def create_app():
     app.register_blueprint(recommendations_bp)
     app.register_blueprint(itineraries_bp)
 
+    @app.route("/")
+    def home():
+        return app.send_static_file("index.html")
+
     return app

@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "name": "Paris",
+    "country": "France",
+    "continent": "Europe",
+    "description": "Iconic city of art, cafes and the Eiffel Tower.",
+    "tags": ["culture", "food", "city", "history"],
+    "avg_cost_per_day": 180
+  },
+  {
+    "id": 2,
+    "name": "Bali",
+    "country": "Indonesia",
+    "continent": "Asia",
+    "description": "Tropical island with beaches, rice terraces and temples.",
+    "tags": ["beach", "nature", "culture", "relaxation"],
+    "avg_cost_per_day": 70
+  },
+  {
+    "id": 3,
+    "name": "Tokyo",
+    "country": "Japan",
+    "continent": "Asia",
+    "description": "Futuristic megacity mixing tradition, tech and street food.",
+    "tags": ["food", "city", "culture", "nightlife"],
+    "avg_cost_per_day": 150
+  },
+  {
+    "id": 4,
+    "name": "Cape Town",
+    "country": "South Africa",
+    "continent": "Africa",
+    "description": "Coastal city under Table Mountain with beaches and vineyards.",
+    "tags": ["beach", "nature", "adventure", "food"],
+    "avg_cost_per_day": 90
+  },
+  {
+    "id": 5,
+    "name": "Marrakech",
+    "country": "Morocco",
+    "continent": "Africa",
+    "description": "Colorful markets, palaces and desert excursions.",
+    "tags": ["culture", "history", "food", "adventure"],
+    "avg_cost_per_day": 60
+  },
+  {
+    "id": 6,
+    "name": "New York City",
+    "country": "USA",
+    "continent": "North America",
+    "description": "The city that never sleeps: museums, Broadway and skyline views.",
+    "tags": ["city", "culture", "nightlife", "food"],
+    "avg_cost_per_day": 250
+  },
+  {
+    "id": 7,
+    "name": "Rio de Janeiro",
+    "country": "Brazil",
+    "continent": "South America",
+    "description": "Famous beaches, Carnival and Christ the Redeemer.",
+    "tags": ["beach", "nightlife", "nature", "culture"],
+    "avg_cost_per_day": 100
+  },
+  {
+    "id": 8,
+    "name": "Cusco",
+    "country": "Peru",
+    "continent": "South America",
+    "description": "Gateway to Machu Picchu and Inca history.",
+    "tags": ["history", "adventure", "nature", "culture"],
+    "avg_cost_per_day": 70
+  },
+  {
+    "id": 9,
+    "name": "Sydney",
+    "country": "Australia",
+    "continent": "Oceania",
+    "description": "Harbour city with the Opera House and surf beaches.",
+    "tags": ["beach", "city", "nature", "food"],
+    "avg_cost_per_day": 170
+  },
+  {
+    "id": 10,
+    "name": "Rome",
+    "country": "Italy",
+    "continent": "Europe",
+    "description": "Ancient ruins, pasta and centuries of history at every corner.",
+    "tags": ["history", "food", "culture", "city"],
+    "avg_cost_per_day": 140
+  }
+]

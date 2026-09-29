@@ -1,92 +1,110 @@
 [
   {
     "id": 1,
-    "name": "Paris",
-    "country": "France",
-    "continent": "Europe",
-    "description": "Iconic city of art, cafes and the Eiffel Tower.",
-    "tags": ["culture", "food", "city", "history"],
-    "avg_cost_per_day": 180
+    "name": "Douala",
+    "country": "Cameroon",
+    "continent": "Littoral",
+    "description": "The economic capital: busy port, markets, nightlife and great grilled fish.",
+    "tags": ["city", "food", "nightlife", "culture"],
+    "avg_cost_per_day": 45000
   },
   {
     "id": 2,
-    "name": "Bali",
-    "country": "Indonesia",
-    "continent": "Asia",
-    "description": "Tropical island with beaches, rice terraces and temples.",
-    "tags": ["beach", "nature", "culture", "relaxation"],
-    "avg_cost_per_day": 70
+    "name": "Yaoundé",
+    "country": "Cameroon",
+    "continent": "Centre",
+    "description": "The political capital, built on seven hills, with museums and lively neighborhoods.",
+    "tags": ["city", "culture", "history", "food"],
+    "avg_cost_per_day": 40000
   },
   {
     "id": 3,
-    "name": "Tokyo",
-    "country": "Japan",
-    "continent": "Asia",
-    "description": "Futuristic megacity mixing tradition, tech and street food.",
-    "tags": ["food", "city", "culture", "nightlife"],
-    "avg_cost_per_day": 150
+    "name": "Kribi",
+    "country": "Cameroon",
+    "continent": "South",
+    "description": "Palm-lined beaches, the Lobé waterfalls falling into the ocean and fresh seafood.",
+    "tags": ["beach", "nature", "relaxation", "food"],
+    "avg_cost_per_day": 50000
   },
   {
     "id": 4,
-    "name": "Cape Town",
-    "country": "South Africa",
-    "continent": "Africa",
-    "description": "Coastal city under Table Mountain with beaches and vineyards.",
-    "tags": ["beach", "nature", "adventure", "food"],
-    "avg_cost_per_day": 90
+    "name": "Limbe",
+    "country": "Cameroon",
+    "continent": "Southwest",
+    "description": "Black volcanic sand beaches, a botanical garden and a wildlife centre.",
+    "tags": ["beach", "nature", "relaxation", "food"],
+    "avg_cost_per_day": 35000
   },
   {
     "id": 5,
-    "name": "Marrakech",
-    "country": "Morocco",
-    "continent": "Africa",
-    "description": "Colorful markets, palaces and desert excursions.",
-    "tags": ["culture", "history", "food", "adventure"],
-    "avg_cost_per_day": 60
+    "name": "Buea",
+    "country": "Cameroon",
+    "continent": "Southwest",
+    "description": "Starting point for climbing Mount Cameroon, the highest peak in the country.",
+    "tags": ["adventure", "nature", "history"],
+    "avg_cost_per_day": 30000
   },
   {
     "id": 6,
-    "name": "New York City",
-    "country": "USA",
-    "continent": "North America",
-    "description": "The city that never sleeps: museums, Broadway and skyline views.",
-    "tags": ["city", "culture", "nightlife", "food"],
-    "avg_cost_per_day": 250
+    "name": "Bafoussam",
+    "country": "Cameroon",
+    "continent": "West",
+    "description": "Gateway to the Grassfields, with rich Bamiléké culture and cool green hills.",
+    "tags": ["culture", "nature", "food", "city"],
+    "avg_cost_per_day": 25000
   },
   {
     "id": 7,
-    "name": "Rio de Janeiro",
-    "country": "Brazil",
-    "continent": "South America",
-    "description": "Famous beaches, Carnival and Christ the Redeemer.",
-    "tags": ["beach", "nightlife", "nature", "culture"],
-    "avg_cost_per_day": 100
+    "name": "Foumban",
+    "country": "Cameroon",
+    "continent": "West",
+    "description": "Home of the Sultan's palace, the royal museum and famous Bamoun crafts.",
+    "tags": ["history", "culture", "art"],
+    "avg_cost_per_day": 25000
   },
   {
     "id": 8,
-    "name": "Cusco",
-    "country": "Peru",
-    "continent": "South America",
-    "description": "Gateway to Machu Picchu and Inca history.",
-    "tags": ["history", "adventure", "nature", "culture"],
-    "avg_cost_per_day": 70
+    "name": "Dschang",
+    "country": "Cameroon",
+    "continent": "West",
+    "description": "A cool mountain town with waterfalls, a scenic lake and coffee-growing hills.",
+    "tags": ["nature", "adventure", "relaxation"],
+    "avg_cost_per_day": 25000
   },
   {
     "id": 9,
-    "name": "Sydney",
-    "country": "Australia",
-    "continent": "Oceania",
-    "description": "Harbour city with the Opera House and surf beaches.",
-    "tags": ["beach", "city", "nature", "food"],
-    "avg_cost_per_day": 170
+    "name": "Bamenda",
+    "country": "Cameroon",
+    "continent": "Northwest",
+    "description": "Highland city known for its climate, craft markets and traditional chiefdoms.",
+    "tags": ["culture", "nature", "food", "history"],
+    "avg_cost_per_day": 28000
   },
   {
     "id": 10,
-    "name": "Rome",
-    "country": "Italy",
-    "continent": "Europe",
-    "description": "Ancient ruins, pasta and centuries of history at every corner.",
-    "tags": ["history", "food", "culture", "city"],
-    "avg_cost_per_day": 140
+    "name": "Maroua",
+    "country": "Cameroon",
+    "continent": "Far North",
+    "description": "A Sahelian city of leather craft, colorful markets and the road to Waza National Park.",
+    "tags": ["culture", "adventure", "nature", "food"],
+    "avg_cost_per_day": 28000
+  },
+  {
+    "id": 11,
+    "name": "Garoua",
+    "country": "Cameroon",
+    "continent": "North",
+    "description": "Port city on the Bénoué river, gateway to Bouba Ndjida and Faro national parks.",
+    "tags": ["nature", "adventure", "culture"],
+    "avg_cost_per_day": 30000
+  },
+  {
+    "id": 12,
+    "name": "Ngaoundéré",
+    "country": "Cameroon",
+    "continent": "Adamawa",
+    "description": "High-plateau city with cool weather, famous grilled beef (soya) and the railway terminus.",
+    "tags": ["food", "culture", "nature"],
+    "avg_cost_per_day": 28000
   }
 ]

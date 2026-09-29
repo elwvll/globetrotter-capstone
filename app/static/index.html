@@ -60,10 +60,10 @@
   <section id="tab-dest">
     <div class="card">
       <div class="row">
-        <input id="s_q" placeholder="Search (e.g. paris)">
+        <input id="s_q" placeholder="Search (e.g. douala)">
         <input id="s_tag" placeholder="Tag (e.g. beach)">
-        <input id="s_cont" placeholder="Continent (e.g. Europe)">
-        <input id="s_cost" type="number" placeholder="Max cost/day">
+        <input id="s_cont" placeholder="Region (e.g. Littoral)">
+        <input id="s_cost" type="number" placeholder="Max cost/day (FCFA)">
         <button onclick="searchDest()">Search</button>
       </div>
     </div>
@@ -159,7 +159,7 @@ function logout(){
 function destCard(x){
   const d = typeof x === 'string' ? { name: x } : x;
   const tags = (d.tags || []).map(t => '<span class="tag">' + esc(t) + '</span>').join('');
-  const cost = d.avg_cost_per_day != null ? '<div class="muted">~$' + esc(d.avg_cost_per_day) + ' / day</div>' : '';
+  const cost = d.avg_cost_per_day != null ? '<div class="muted">~' + Number(d.avg_cost_per_day).toLocaleString('fr-FR') + ' FCFA / day</div>' : '';
   return '<div class="card"><h3>' + esc(d.name) + '</h3>' +
     '<div class="muted">' + esc(d.country || '') + (d.continent ? ' · ' + esc(d.continent) : '') + '</div>' +
     '<p>' + esc(d.description || '') + '</p>' + tags + cost +

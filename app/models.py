@@ -99,3 +99,18 @@ def save_itinerary(itinerary: dict) -> None:
     itineraries = get_all_itineraries()
     itineraries.append(itinerary)
     _write_json(ITINERARIES_FILE, itineraries)
+
+def delete_itinerary(itinerary_id: str, username: str) -> str:
+    """Delete an itinerary owned by *username*.
+
+    Returns "deleted", "not_found" or "forbidden".
+    """
+    itineraries = get_all_itineraries()
+    for it in itineraries:
+        if it.get("id") == itinerary_id:
+            if it.get("username") != username:
+                return "forbidden"
+            itineraries.remove(it)
+            _write_json(ITINERARIES_FILE, itineraries)
+            return "deleted"
+    return "not_found"

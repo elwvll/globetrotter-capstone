@@ -295,12 +295,16 @@ async function createTrip(){
     await api('/itineraries','POST',{title,destinations:basket,start_date:$('#t_start').value,end_date:$('#t_end').value});
     toast('Trip saved.');$('#t_title').value='';basket=[];renderBasket();loadTrips()
   }catch(e){toast(e.message,1)}}
+async function deleteTrip(id){
+  if(!confirm('Delete this trip? This cannot be undone.'))return;
+  try{await api('/itineraries/'+encodeURIComponent(id),'DELETE');toast('Trip deleted.');loadTrips()}
+  catch(e){toast(e.message,1)}}
 async function loadTrips(){
   renderBasket();
   if(!token){$('#trip-list').innerHTML='<div class="empty"><h3>Log in to see your trips</h3><button class="btn dark" onclick="openAuth()">Log in</button></div>';return}
   try{
     const d=await api('/itineraries'),l=Array.isArray(d)?d:(d.itineraries||[]);
-    $('#trip-list').innerHTML=l.length?l.map(t=>'<div class="panel trip"><div><h4>'+esc(t.title)+'</h4><div class="muted">'+esc(t.start_date||'No start date')+' to '+esc(t.end_date||'No end date')+'</div></div><div class="tags">'+(t.destinations||[]).map(x=>'<span class="tag">'+esc(x)+'</span>').join('')+'</div></div>').join(''):'<div class="empty"><h3>No trips yet</h3>Add destinations in Explore, then save your first trip.</div>'
+    $('#trip-list').innerHTML=l.length?l.map(t=>'<div class="panel trip"><div><h4>'+esc(t.title)+'</h4><div class="muted">'+esc(t.start_date||'No start date')+' to '+esc(t.end_date||'No end date')+'</div></div><div class="tags">'+(t.destinations||[]).map(x=>'<span class="tag">'+esc(x)+'</span>').join('')+'</div><button class="btn ghost" style="color:var(--danger)" data-id="'+esc(t.id)+'" onclick="deleteTrip(this.dataset.id)">Delete</button></div>').join(''):'<div class="empty"><h3>No trips yet</h3>Add destinations in Explore, then save your first trip.</div>'
   }catch(e){toast(e.message,1)}}
 async function loadRec(){
   if(!token){$('#rec-list').innerHTML='<div class="empty"><h3>Log in for personal picks</h3>We match places to the interests you chose when you registered.<br><br><button class="btn dark" onclick="openAuth()">Log in</button></div>';return}

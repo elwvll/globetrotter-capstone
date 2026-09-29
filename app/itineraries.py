@@ -16,7 +16,7 @@ import datetime
 from flask import Blueprint, request, jsonify
 
 from app.auth import get_current_user
-from app.models import get_itineraries_for_user, save_itinerary
+from app.models import get_itineraries_for_user, save_itinerary, delete_itinerary
 
 itineraries_bp = Blueprint("itineraries", __name__)
 
@@ -78,3 +78,21 @@ def list_itineraries():
 
     itineraries = get_itineraries_for_user(username)
     return jsonify(itineraries), 200
+
+@itineraries_bp.route("/itineraries/<itinerary_id>", methods=["DELETE"])
+def remove_itinerary(itinerary_id):
+    """Delete one of the authenticated user's itineraries.
+
+    Returns 200 on success, 401 if not logged in, 403 if the itinerary
+    belongs to someone else, 404 if it does not exist.
+    """
+    username = get_current_user(request)
+    if not username:
+        return jsonify({"error": "authentication required"}), 401
+
+    result = delete_itinerary(itinerary_id, username)
+    if result == "not_found":
+        return jsonify({"error": "itinerary not found"}), 404
+    if result == "forbidden":
+        return jsonify({"error": "you can only delete your own itineraries"}), 403
+    return jsonify({"message": "itinerary deleted"}), 200

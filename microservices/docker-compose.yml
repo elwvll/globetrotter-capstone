@@ -1,0 +1,44 @@
+# Phase 2: one container per service. Only the gateway is exposed to the outside.
+services:
+  gateway:
+    build: ./gateway
+    ports:
+      - "5000:5000"
+    environment:
+      - AUTH_URL=http://auth:5001
+      - DESTINATIONS_URL=http://destinations:5002
+      - ITINERARIES_URL=http://itineraries:5003
+      - CHAT_URL=http://chat:5004
+    depends_on: [auth, destinations, itineraries, chat]
+
+  auth:
+    build: ./auth
+    environment:
+      - SECRET_KEY=${SECRET_KEY:-globetrotter-secret-change-in-prod}
+      - INTERNAL_KEY=${INTERNAL_KEY:-internal-dev-key}
+    volumes:
+      - ./auth/data:/app/data
+
+  destinations:
+    build: ./destinations
+    environment:
+      - SECRET_KEY=${SECRET_KEY:-globetrotter-secret-change-in-prod}
+      - INTERNAL_KEY=${INTERNAL_KEY:-internal-dev-key}
+      - AUTH_URL=http://auth:5001
+    volumes:
+      - ./destinations/data:/app/data
+
+  itineraries:
+    build: ./itineraries
+    environment:
+      - SECRET_KEY=${SECRET_KEY:-globetrotter-secret-change-in-prod}
+    volumes:
+      - ./itineraries/data:/app/data
+
+  # WebSocket service: the browser connects to it directly on port 5004
+  chat:
+    build: ./chat
+    ports:
+      - "5004:5004"
+    environment:
+      - SECRET_KEY=${SECRET_KEY:-globetrotter-secret-change-in-prod}

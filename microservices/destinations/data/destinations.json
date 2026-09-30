@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1,
+    "name": "Douala",
+    "country": "Cameroon",
+    "continent": "Littoral",
+    "description": "The economic capital: busy port, markets, nightlife and great grilled fish.",
+    "tags": ["city", "food", "nightlife", "culture"],
+    "avg_cost_per_day": 45000
+  },
+  {
+    "id": 2,
+    "name": "Yaoundé",
+    "country": "Cameroon",
+    "continent": "Centre",
+    "description": "The political capital, built on seven hills, with museums and lively neighborhoods.",
+    "tags": ["city", "culture", "history", "food"],
+    "avg_cost_per_day": 40000
+  },
+  {
+    "id": 3,
+    "name": "Kribi",
+    "country": "Cameroon",
+    "continent": "South",
+    "description": "Palm-lined beaches, the Lobé waterfalls falling into the ocean and fresh seafood.",
+    "tags": ["beach", "nature", "relaxation", "food"],
+    "avg_cost_per_day": 50000
+  },
+  {
+    "id": 4,
+    "name": "Limbe",
+    "country": "Cameroon",
+    "continent": "Southwest",
+    "description": "Black volcanic sand beaches, a botanical garden and a wildlife centre.",
+    "tags": ["beach", "nature", "relaxation", "food"],
+    "avg_cost_per_day": 35000
+  },
+  {
+    "id": 5,
+    "name": "Buea",
+    "country": "Cameroon",
+    "continent": "Southwest",
+    "description": "Starting point for climbing Mount Cameroon, the highest peak in the country.",
+    "tags": ["adventure", "nature", "history"],
+    "avg_cost_per_day": 30000
+  },
+  {
+    "id": 6,
+    "name": "Bafoussam",
+    "country": "Cameroon",
+    "continent": "West",
+    "description": "Gateway to the Grassfields, with rich Bamiléké culture and cool green hills.",
+    "tags": ["culture", "nature", "food", "city"],
+    "avg_cost_per_day": 25000
+  },
+  {
+    "id": 7,
+    "name": "Foumban",
+    "country": "Cameroon",
+    "continent": "West",
+    "description": "Home of the Sultan's palace, the royal museum and famous Bamoun crafts.",
+    "tags": ["history", "culture", "art"],
+    "avg_cost_per_day": 25000
+  },
+  {
+    "id": 8,
+    "name": "Dschang",
+    "country": "Cameroon",
+    "continent": "West",
+    "description": "A cool mountain town with waterfalls, a scenic lake and coffee-growing hills.",
+    "tags": ["nature", "adventure", "relaxation"],
+    "avg_cost_per_day": 25000
+  },
+  {
+    "id": 9,
+    "name": "Bamenda",
+    "country": "Cameroon",
+    "continent": "Northwest",
+    "description": "Highland city known for its climate, craft markets and traditional chiefdoms.",
+    "tags": ["culture", "nature", "food", "history"],
+    "avg_cost_per_day": 28000
+  },
+  {
+    "id": 10,
+    "name": "Maroua",
+    "country": "Cameroon",
+    "continent": "Far North",
+    "description": "A Sahelian city of leather craft, colorful markets and the road to Waza National Park.",
+    "tags": ["culture", "adventure", "nature", "food"],
+    "avg_cost_per_day": 28000
+  },
+  {
+    "id": 11,
+    "name": "Garoua",
+    "country": "Cameroon",
+    "continent": "North",
+    "description": "Port city on the Bénoué river, gateway to Bouba Ndjida and Faro national parks.",
+    "tags": ["nature", "adventure", "culture"],
+    "avg_cost_per_day": 30000
+  },
+  {
+    "id": 12,
+    "name": "Ngaoundéré",
+    "country": "Cameroon",
+    "continent": "Adamawa",
+    "description": "High-plateau city with cool weather, famous grilled beef (soya) and the railway terminus.",
+    "tags": ["food", "culture", "nature"],
+    "avg_cost_per_day": 28000
+  }
+]

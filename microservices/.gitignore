@@ -1,0 +1,4 @@
+# runtime data must not be committed (destinations.json is seed data and stays)
+auth/data/users.json
+itineraries/data/itineraries.json
+__pycache__/

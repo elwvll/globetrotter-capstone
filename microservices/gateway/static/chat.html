@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GlobeTrotter · Traveler chat</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#0a2226;--ink:#12272a;--paper:#f6f8f7;--line:#dde5e2;--muted:#5d6d6e;--teal:#137a7f;--gold:#e9a820;
+--serif:'Fraunces',Georgia,serif;--sans:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--sans);background:var(--paper);color:var(--ink);height:100vh;display:flex;flex-direction:column}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+header{background:var(--deep);color:#fff;padding:0 20px;height:60px;display:flex;align-items:center;gap:16px;flex-shrink:0}
+.logo{font-family:var(--serif);font-size:1.3rem;margin-right:auto}.logo span{color:var(--gold)}
+header a{color:#c9d8d6;text-decoration:none;font-weight:600}header a:hover{color:#fff}
+.app{flex:1;display:grid;grid-template-columns:250px 1fr;min-height:0;max-width:1100px;width:100%;margin:0 auto}
+aside{border-right:1px solid var(--line);padding:16px;overflow:auto;background:#fff}
+aside h2{font-family:var(--serif);font-size:1.1rem;margin:0 0 10px}
+.room{display:block;width:100%;text-align:left;border:0;background:none;padding:9px 12px;border-radius:10px;cursor:pointer;font:inherit;font-weight:600;color:var(--ink)}
+.room:hover{background:#eef3f2}.room.on{background:var(--teal);color:#fff}
+.status{font-size:.82rem;color:var(--muted);margin-top:16px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#b3261e;margin-right:6px}.dot.ok{background:#2e9e5b}
+main{display:flex;flex-direction:column;min-height:0;background:var(--paper)}
+.top{padding:14px 20px;border-bottom:1px solid var(--line);background:#fff}
+.top h1{margin:0;font-family:var(--serif);font-size:1.3rem}
+.top div{font-size:.85rem;color:var(--muted)}
+#msgs{flex:1;overflow:auto;padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.m{max-width:75%;padding:8px 13px;border-radius:14px;background:#fff;border:1px solid var(--line);align-self:flex-start;word-wrap:break-word}
+.m.me{align-self:flex-end;background:var(--teal);color:#fff;border-color:var(--teal)}
+.m b{display:block;font-size:.76rem;opacity:.75;margin-bottom:1px}
+.m i{font-style:normal;font-size:.7rem;opacity:.6;margin-left:8px}
+.sys{align-self:center;font-size:.8rem;color:var(--muted)}
+form{display:flex;gap:8px;padding:14px 20px;border-top:1px solid var(--line);background:#fff}
+input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:999px;padding:11px 18px;font:inherit}
+button.send{border:0;border-radius:999px;background:var(--gold);color:var(--deep);font-weight:700;padding:0 24px;cursor:pointer;font:inherit;font-weight:700}
+button.send:disabled{opacity:.5}
+.gate{margin:auto;text-align:center;padding:30px}
+.gate a{display:inline-block;margin-top:12px;background:var(--deep);color:#fff;padding:10px 22px;border-radius:999px;text-decoration:none;font-weight:700}
+@media(max-width:700px){.app{grid-template-columns:1fr;grid-template-rows:auto 1fr}aside{border-right:0;border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto;padding:10px}aside h2,.status{display:none}.room{width:auto;white-space:nowrap}}
+</style>
+</head>
+<body>
+<header><div class="logo">Globe<span>Trotter</span> chat</div><a href="/">Back to the app</a></header>
+<div class="app" id="app">
+  <aside><h2>Rooms</h2><div id="rooms"></div><div class="status"><span class="dot" id="dot"></span><span id="st">Connecting...</span></div></aside>
+  <main>
+    <div class="top"><h1 id="rt">Choose a room</h1><div id="pr"></div></div>
+    <div id="msgs" aria-live="polite"></div>
+    <form id="f"><input id="t" maxlength="500" placeholder="Write a message" autocomplete="off" aria-label="Message" disabled><button class="send" id="b" disabled>Send</button></form>
+  </main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+const token=localStorage.getItem('gt_token')||'',me=localStorage.getItem('gt_user')||'';
+const $=s=>document.querySelector(s);
+let sock,cur='',labels={};
+
+if(!token){
+  $('#app').innerHTML='<div class="gate"><h1 style="font-family:var(--serif)">Log in to chat</h1><p>Chat is for registered travelers.</p><a href="/">Go to login</a></div>';
+}else{
+  // The chat service runs on its own port (5004); the browser connects to it directly.
+  sock=io(location.protocol+'//'+location.hostname+':5004',{auth:{token}});
+  sock.on('connect',()=>{$('#dot').classList.add('ok');$('#st').textContent='Connected as '+me;if(cur)join(cur)});
+  sock.on('disconnect',()=>{$('#dot').classList.remove('ok');$('#st').textContent='Disconnected, retrying...';$('#t').disabled=$('#b').disabled=true});
+  sock.on('connect_error',()=>{$('#st').textContent='Cannot connect. Log in again or check the chat service.'});
+  sock.on('rooms',list=>{
+    $('#rooms').innerHTML='';
+    list.forEach(r=>{labels[r.id]=r.label;const b=document.createElement('button');b.className='room';b.textContent=r.label;b.dataset.id=r.id;b.onclick=()=>join(r.id);$('#rooms').appendChild(b)});
+    if(!cur)join(list[0].id)});
+  sock.on('history',d=>{if(d.room!==cur)return;$('#msgs').innerHTML='';d.messages.forEach(add);scroll()});
+  sock.on('message',m=>{if(m.room===cur){add(m);scroll()}});
+  sock.on('presence',d=>{if(d.room===cur)$('#pr').textContent=d.users.length+' online: '+d.users.join(', ')});
+  sock.on('error_msg',e=>{const d=document.createElement('div');d.className='sys';d.textContent=e.error;$('#msgs').appendChild(d);scroll()});
+  $('#f').onsubmit=e=>{e.preventDefault();const t=$('#t').value.trim();if(!t||!cur)return;sock.emit('message',{room:cur,text:t});$('#t').value=''};
+}
+function join(id){
+  if(cur&&cur!==id)sock.emit('leave',{room:cur});
+  cur=id;$('#rt').textContent=labels[id]||id;$('#pr').textContent='';$('#msgs').innerHTML='';
+  document.querySelectorAll('.room').forEach(b=>b.classList.toggle('on',b.dataset.id===id));
+  $('#t').disabled=$('#b').disabled=false;sock.emit('join',{room:id})}
+function add(m){
+  const d=document.createElement('div');
+  if(m.system){d.className='sys';d.textContent=m.text}
+  else{d.className='m'+(m.user===me?' me':'');
+    const b=document.createElement('b');b.textContent=m.user;
+    const t=document.createElement('i');t.textContent=new Date(m.ts).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});b.appendChild(t);
+    d.appendChild(b);d.appendChild(document.createTextNode(m.text))}
+  $('#msgs').appendChild(d)}
+function scroll(){const m=$('#msgs');m.scrollTop=m.scrollHeight}
+</script>
+</body>
+</html>

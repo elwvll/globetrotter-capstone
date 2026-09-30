@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GlobeTrotter · Discover Cameroon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#0a2226;--ink:#12272a;--paper:#f6f8f7;--card:#fff;--line:#dde5e2;--muted:#5d6d6e;--teal:#137a7f;--gold:#e9a820;--danger:#b3261e;
+--serif:'Fraunces',Georgia,'Times New Roman',serif;--sans:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.55}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+/* nav */
+nav{position:sticky;top:0;z-index:20;background:rgba(10,34,38,.94);backdrop-filter:blur(8px);color:#fff}
+nav .wrap{display:flex;align-items:center;gap:20px;height:64px}
+.logo{font-family:var(--serif);font-weight:700;font-size:1.35rem;letter-spacing:.2px;margin-right:auto}
+.logo span{color:var(--gold)}
+.links{display:flex;gap:4px}
+.links button{background:none;border:0;color:#c9d8d6;padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:600}
+.links button:hover{color:#fff}
+.links button.on{background:#fff;color:var(--deep)}
+.who{display:flex;align-items:center;gap:10px;font-size:.92rem}
+.btn{border:0;border-radius:999px;padding:10px 20px;font-weight:700;cursor:pointer;background:var(--gold);color:var(--deep);transition:transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:inherit;border:1.5px solid currentColor}
+.btn.dark{background:var(--deep);color:#fff}
+.btn:disabled{opacity:.6;cursor:wait}
+/* hero */
+.hero{background:radial-gradient(900px 400px at 85% -10%,rgba(233,168,32,.22),transparent 60%),radial-gradient(700px 400px at 0% 110%,rgba(19,122,127,.45),transparent 60%),var(--deep);color:#fff;padding:64px 0 76px}
+.hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(2.2rem,5.4vw,4rem);line-height:1.08;margin:0 0 14px;max-width:16ch}
+.hero p{color:#b9cccb;max-width:52ch;font-size:1.08rem;margin:0 0 30px}
+.searchbar{display:flex;gap:8px;background:#fff;border-radius:999px;padding:7px;max-width:640px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.searchbar input{flex:1;min-width:0;border:0;background:none;padding:0 18px;color:var(--ink);font-size:1rem}
+.searchbar input:focus-visible{outline:none}
+.searchbar:focus-within{box-shadow:0 0 0 3px var(--gold),0 20px 50px rgba(0,0,0,.35)}
+.stats{display:flex;gap:34px;margin-top:34px;color:#b9cccb;font-size:.92rem;flex-wrap:wrap}
+.stats b{display:block;color:#fff;font-family:var(--serif);font-size:1.6rem}
+/* filters */
+.filters{margin:-28px auto 26px;position:relative;z-index:2}
+.fbox{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;box-shadow:0 10px 30px rgba(10,34,38,.08);display:grid;gap:14px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;cursor:pointer;font-weight:600;font-size:.88rem;text-transform:capitalize}
+.chip:hover{border-color:var(--teal)}
+.chip.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.frow{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+.frow label{font-size:.88rem;color:var(--muted);display:flex;align-items:center;gap:10px;font-weight:600}
+select{border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff}
+input[type=range]{accent-color:var(--teal);width:180px}
+/* grid + cards */
+.head{display:flex;justify-content:space-between;align-items:baseline;margin:6px 0 16px}
+.head h2{font-family:var(--serif);font-size:1.7rem;margin:0}
+.count{color:var(--muted);font-size:.92rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px}
+.dest{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.cover{height:120px;padding:14px;display:flex;justify-content:space-between;align-items:flex-start;color:#fff;font-size:.82rem;font-weight:700}
+.cover span{background:rgba(0,0,0,.28);padding:3px 10px;border-radius:999px}
+.dbody{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.dbody h3{font-family:var(--serif);font-size:1.4rem;margin:0}
+.dbody p{margin:0;color:var(--muted);font-size:.94rem;flex:1}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{background:#eaf3f2;color:#0d5a5e;border-radius:6px;padding:2px 9px;font-size:.78rem;font-weight:600;text-transform:capitalize}
+.dfoot{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.price{font-weight:700}
+.price small{color:var(--muted);font-weight:500}
+.add{border:1.5px solid var(--teal);background:#fff;color:var(--teal);border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;font-size:.88rem}
+.add.in{background:var(--teal);color:#fff}
+.skel{height:300px;border-radius:16px;background:linear-gradient(90deg,#e8eeec 25%,#f3f6f5 50%,#e8eeec 75%);background-size:200% 100%;animation:sh 1.3s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.empty{grid-column:1/-1;text-align:center;padding:50px 20px;color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:16px}
+.empty h3{font-family:var(--serif);color:var(--ink);margin:0 0 6px}
+.wake{display:none;color:var(--muted);font-size:.9rem;margin-bottom:12px}
+/* trips */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:22px}
+.panel h3{font-family:var(--serif);margin:0 0 14px;font-size:1.3rem}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.form label{display:grid;gap:5px;font-size:.85rem;font-weight:600;color:var(--muted)}
+.form input{border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--ink);background:#fff}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.pill{background:var(--deep);color:#fff;border-radius:999px;padding:5px 6px 5px 14px;font-size:.88rem;font-weight:600;display:flex;gap:6px;align-items:center}
+.pill button{border:0;background:rgba(255,255,255,.2);color:#fff;border-radius:50%;width:22px;height:22px;cursor:pointer;line-height:1}
+.trip{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+.trip h4{margin:0;font-family:var(--serif);font-size:1.2rem}
+.muted{color:var(--muted);font-size:.9rem}
+/* dialog + toast */
+dialog{border:0;border-radius:20px;padding:0;width:min(420px,92vw);box-shadow:0 30px 80px rgba(0,0,0,.4)}
+dialog::backdrop{background:rgba(6,20,22,.65)}
+.dlg{padding:26px}
+.dlg h3{font-family:var(--serif);font-size:1.6rem;margin:0 0 4px}
+.dlg .form{grid-template-columns:1fr}
+.switch{background:none;border:0;color:var(--teal);font-weight:700;cursor:pointer;padding:0;margin-top:12px}
+.bar{position:fixed;left:50%;bottom:18px;transform:translate(-50%,120px);background:var(--deep);color:#fff;border-radius:999px;padding:10px 12px 10px 22px;display:flex;gap:14px;align-items:center;box-shadow:0 14px 40px rgba(0,0,0,.35);transition:transform .25s;z-index:30;max-width:94vw}
+.bar.show{transform:translate(-50%,0)}
+.bar span{font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46vw}
+#toast{position:fixed;top:78px;right:16px;background:#fff;border-left:5px solid var(--teal);padding:12px 18px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.2);display:none;z-index:40;max-width:min(360px,90vw);font-weight:600}
+#toast.err{border-color:var(--danger)}
+.hidden{display:none!important}
+footer{margin-top:60px;padding:28px 0 90px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+@media(max-width:640px){.links{display:none}.mobnav{display:flex!important}.hero{padding:44px 0 60px}}
+.mobnav{display:none;gap:6px;padding:10px 20px;background:var(--deep);overflow-x:auto}
+.mobnav button{background:none;border:0;color:#c9d8d6;padding:7px 14px;border-radius:999px;font-weight:600;white-space:nowrap}
+.mobnav button.on{background:#fff;color:var(--deep)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <div class="logo">Globe<span>Trotter</span></div>
+  <div class="links" id="links">
+    <button data-tab="explore" class="on">Explore</button>
+    <button data-tab="rec">For you</button>
+    <button data-tab="trips">My trips</button>
+  </div>
+  <div class="who" id="who"></div>
+</div></nav>
+<div class="mobnav" id="mobnav">
+  <button data-tab="explore" class="on">Explore</button>
+  <button data-tab="rec">For you</button>
+  <button data-tab="trips">My trips</button>
+</div>
+
+<section class="hero" id="hero"><div class="wrap">
+  <h1>Plan your journey across Cameroon.</h1>
+  <p>From the beaches of Kribi to the slopes of Mount Cameroon, find where to go, what it costs in FCFA, and save your trip in one place.</p>
+  <form class="searchbar" onsubmit="event.preventDefault();searchDest()" role="search">
+    <input id="s_q" placeholder="Search a city, e.g. Douala" aria-label="Search destinations">
+    <button class="btn" type="submit">Search</button>
+  </form>
+  <div class="stats" id="stats"></div>
+</div></section>
+
+<main class="wrap">
+  <section id="tab-explore">
+    <div class="filters"><div class="fbox">
+      <div class="chips" id="chips" aria-label="Interests"></div>
+      <div class="frow">
+        <label>Region <select id="s_cont"><option value="">All regions</option></select></label>
+        <label>Budget <input id="s_cost" type="range" min="10000" max="60000" step="5000" value="60000"><b id="costv">Any</b></label>
+        <button class="btn ghost" style="color:var(--teal)" onclick="resetFilters()">Clear filters</button>
+      </div>
+    </div></div>
+    <div class="head"><h2>Destinations</h2><span class="count" id="count"></span></div>
+    <div class="wake" id="wake">Waking up the server, this can take up to a minute on the free plan.</div>
+    <div class="grid" id="dest-list"></div>
+  </section>
+
+  <section id="tab-rec" class="hidden" style="padding-top:34px">
+    <div class="head"><h2>Picked for you</h2></div>
+    <div class="grid" id="rec-list"></div>
+  </section>
+
+  <section id="tab-trips" class="hidden" style="padding-top:34px">
+    <div class="panel">
+      <h3>Plan a trip</h3>
+      <div class="form">
+        <label>Trip name<input id="t_title" placeholder="Weekend in Kribi"></label>
+        <label>Start<input id="t_start" type="date"></label>
+        <label>End<input id="t_end" type="date"></label>
+      </div>
+      <div class="pills" id="pills"></div>
+      <p class="muted" id="pillhint">Add destinations from Explore and they appear here.</p>
+      <button class="btn dark" onclick="createTrip()">Save trip</button>
+    </div>
+    <div class="head"><h2>Saved trips</h2></div>
+    <div id="trip-list"></div>
+  </section>
+</main>
+
+<footer><div class="wrap">GlobeTrotter · Monolith edition · Prices are estimates per person per day in FCFA.</div></footer>
+
+<div class="bar" id="bar"><span id="barTxt"></span><button class="btn" onclick="showTab('trips')">Plan trip</button></div>
+<div id="toast" role="status"></div>
+
+<dialog id="dlg"><div class="dlg">
+  <h3 id="dTitle">Welcome back</h3>
+  <p class="muted" id="dSub">Log in to see recommendations and save trips.</p>
+  <div class="form" style="margin-top:14px">
+    <label>Username<input id="a_user" autocomplete="username"></label>
+    <label>Password<input id="a_pass" type="password" autocomplete="current-password"></label>
+    <label id="prefRow" class="hidden">Interests, separated by commas<input id="a_prefs" placeholder="beach, food, culture"></label>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:18px">
+    <button class="btn dark" id="dGo" onclick="submitAuth()">Log in</button>
+    <button class="btn ghost" style="color:var(--muted)" onclick="dlg.close()">Cancel</button>
+  </div>
+  <button class="switch" id="dSwitch" onclick="toggleMode()">New here? Create an account</button>
+</div></dialog>
+
+<script>
+let token=localStorage.getItem('gt_token')||'',username=localStorage.getItem('gt_user')||'';
+let mode='login',tagSel='',basket=[],allDest=[];
+const $=s=>document.querySelector(s),dlg=$('#dlg');
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fcfa=n=>Number(n).toLocaleString('fr-FR')+' FCFA';
+const GRAD={beach:['#0f6f78','#5cc4c0'],nature:['#276e45','#9fd27a'],culture:['#5b3a8c','#c79be0'],city:['#1e3a5f','#6f95c9'],adventure:['#a4550f','#f0b458'],food:['#8f2230','#e8776c'],history:['#5e5128','#c9b26b'],relaxation:['#0f6f78','#8fd9c9'],art:['#5b3a8c','#e0a3c8']};
+
+function toast(t,err){const m=$('#toast');m.textContent=t;m.className=err?'err':'';m.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>m.style.display='none',3600)}
+
+async function api(path,method='GET',body){
+  const h={};if(body)h['Content-Type']='application/json';if(token)h['Authorization']='Bearer '+token;
+  const r=await fetch(path,{method,headers:h,body:body?JSON.stringify(body):undefined});
+  let d=null;try{d=await r.json()}catch(e){}
+  if(!r.ok){if(r.status===401&&token){logout(true)}throw new Error((d&&(d.error||d.message))||'Request failed ('+r.status+')')}
+  return d}
+
+/* tabs */
+function showTab(n){
+  ['explore','rec','trips'].forEach(t=>$('#tab-'+t).classList.toggle('hidden',t!==n));
+  $('#hero').classList.toggle('hidden',n!=='explore');
+  document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===n));
+  if(n==='rec')loadRec();if(n==='trips')loadTrips();
+  window.scrollTo({top:0})}
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+
+/* auth */
+function renderUser(){
+  $('#who').innerHTML=token?'<span>'+esc(username)+'</span><button class="btn ghost" onclick="logout()">Log out</button>':'<button class="btn" onclick="openAuth()">Log in</button>'}
+function openAuth(m){mode=m||'login';applyMode();dlg.showModal()}
+function toggleMode(){mode=mode==='login'?'register':'login';applyMode()}
+function applyMode(){
+  const r=mode==='register';
+  $('#dTitle').textContent=r?'Create your account':'Welcome back';
+  $('#dSub').textContent=r?'Tell us what you enjoy and we will suggest places.':'Log in to see recommendations and save trips.';
+  $('#dGo').textContent=r?'Create account':'Log in';
+  $('#dSwitch').textContent=r?'Already registered? Log in':'New here? Create an account';
+  $('#prefRow').classList.toggle('hidden',!r)}
+async function submitAuth(){
+  const u=$('#a_user').value.trim(),p=$('#a_pass').value,b=$('#dGo');
+  if(!u||!p){toast('Enter a username and a password.',1);return}
+  b.disabled=true;
+  try{
+    if(mode==='register'){
+      const prefs=$('#a_prefs').value.split(',').map(s=>s.trim()).filter(Boolean);
+      await api('/register','POST',{username:u,password:p,preferences:prefs})}
+    const d=await api('/login','POST',{username:u,password:p});
+    token=d.token;username=u;localStorage.setItem('gt_token',token);localStorage.setItem('gt_user',u);
+    dlg.close();renderUser();toast('Welcome, '+u+'.')
+  }catch(e){toast(e.message,1)}finally{b.disabled=false}}
+function logout(silent){
+  token='';username='';localStorage.removeItem('gt_token');localStorage.removeItem('gt_user');
+  renderUser();$('#rec-list').innerHTML='';$('#trip-list').innerHTML='';
+  if(silent===true)toast('Your session expired. Please log in again.',1);showTab('explore')}
+
+/* destinations */
+function card(x){
+  const d=typeof x==='string'?{name:x}:x,t=(d.tags||[])[0]||'',g=GRAD[t]||['#1e3a5f','#6f95c9'],inb=basket.includes(d.name);
+  return '<article class="dest"><div class="cover" style="background:linear-gradient(135deg,'+g[0]+','+g[1]+')"><span>'+esc(d.continent||d.country||'')+'</span>'+
+  (d.avg_cost_per_day!=null?'<span>'+fcfa(d.avg_cost_per_day)+'</span>':'')+'</div><div class="dbody"><h3>'+esc(d.name)+'</h3><p>'+esc(d.description||'')+'</p><div class="tags">'+
+  (d.tags||[]).map(t=>'<span class="tag">'+esc(t)+'</span>').join('')+'</div><div class="dfoot"><div class="price">'+
+  (d.avg_cost_per_day!=null?fcfa(d.avg_cost_per_day)+' <small>/ day</small>':'')+'</div><button class="add'+(inb?' in':'')+'" data-n="'+esc(d.name)+'" onclick="toggleBasket(this.dataset.n)">'+(inb?'Added':'Add to trip')+'</button></div></div></article>'}
+
+async function searchDest(){
+  const p=new URLSearchParams(),q=$('#s_q').value.trim(),c=$('#s_cont').value,cost=+$('#s_cost').value;
+  if(q)p.set('q',q);if(tagSel)p.set('tag',tagSel);if(c)p.set('continent',c);if(cost<60000)p.set('max_cost',cost);
+  $('#dest-list').innerHTML='<div class="skel"></div><div class="skel"></div><div class="skel"></div>';
+  const w=setTimeout(()=>$('#wake').style.display='block',4000);
+  try{
+    const l=await api('/destinations?'+p);
+    $('#count').textContent=l.length+(l.length===1?' place':' places');
+    $('#dest-list').innerHTML=l.length?l.map(card).join(''):'<div class="empty"><h3>No matches</h3>Try another city, a different interest, or a higher budget.</div>'
+  }catch(e){$('#dest-list').innerHTML='<div class="empty"><h3>Could not load destinations</h3>'+esc(e.message)+'</div>'}
+  finally{clearTimeout(w);$('#wake').style.display='none'}}
+
+function buildFilters(){
+  const tags=[...new Set(allDest.flatMap(d=>d.tags||[]))].sort(),regs=[...new Set(allDest.map(d=>d.continent).filter(Boolean))].sort();
+  $('#chips').innerHTML=tags.map(t=>'<button class="chip" data-t="'+esc(t)+'">'+esc(t)+'</button>').join('');
+  document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{tagSel=tagSel===c.dataset.t?'':c.dataset.t;document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x.dataset.t===tagSel));searchDest()});
+  $('#s_cont').innerHTML='<option value="">All regions</option>'+regs.map(r=>'<option>'+esc(r)+'</option>').join('');
+  $('#s_cont').onchange=searchDest;
+  $('#s_cost').oninput=e=>{$('#costv').textContent=+e.target.value>=60000?'Any':'Up to '+fcfa(e.target.value)};
+  $('#s_cost').onchange=searchDest;
+  $('#stats').innerHTML='<div><b>'+allDest.length+'</b>destinations</div><div><b>'+regs.length+'</b>regions</div><div><b>'+tags.length+'</b>interests</div>'}
+function resetFilters(){tagSel='';$('#s_q').value='';$('#s_cont').value='';$('#s_cost').value=60000;$('#costv').textContent='Any';document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));searchDest()}
+
+/* basket + trips */
+function toggleBasket(n){
+  basket=basket.includes(n)?basket.filter(x=>x!==n):[...basket,n];
+  renderBasket();
+  ['#dest-list','#rec-list'].forEach(s=>{const el=$(s);if(el&&el.children.length)el.querySelectorAll('.add').forEach(b=>{const on=basket.includes(b.dataset.n);b.classList.toggle('in',on);b.textContent=on?'Added':'Add to trip'})})}
+function renderBasket(){
+  $('#pills').innerHTML=basket.map(n=>'<span class="pill">'+esc(n)+'<button data-n="'+esc(n)+'" aria-label="Remove '+esc(n)+'" onclick="toggleBasket(this.dataset.n)">×</button></span>').join('');
+  $('#pillhint').classList.toggle('hidden',basket.length>0);
+  $('#barTxt').textContent=basket.length+(basket.length===1?' destination: ':' destinations: ')+basket.join(', ');
+  $('#bar').classList.toggle('show',basket.length>0&&$('#tab-trips').classList.contains('hidden'))}
+async function createTrip(){
+  if(!token){toast('Log in to save your trip.',1);openAuth();return}
+  const title=$('#t_title').value.trim();
+  if(!title||!basket.length){toast('Give your trip a name and add at least one destination.',1);return}
+  try{
+    await api('/itineraries','POST',{title,destinations:basket,start_date:$('#t_start').value,end_date:$('#t_end').value});
+    toast('Trip saved.');$('#t_title').value='';basket=[];renderBasket();loadTrips()
+  }catch(e){toast(e.message,1)}}
+async function deleteTrip(id){
+  if(!confirm('Delete this trip? This cannot be undone.'))return;
+  try{await api('/itineraries/'+encodeURIComponent(id),'DELETE');toast('Trip deleted.');loadTrips()}
+  catch(e){toast(e.message,1)}}
+async function loadTrips(){
+  renderBasket();
+  if(!token){$('#trip-list').innerHTML='<div class="empty"><h3>Log in to see your trips</h3><button class="btn dark" onclick="openAuth()">Log in</button></div>';return}
+  try{
+    const d=await api('/itineraries'),l=Array.isArray(d)?d:(d.itineraries||[]);
+    $('#trip-list').innerHTML=l.length?l.map(t=>'<div class="panel trip"><div><h4>'+esc(t.title)+'</h4><div class="muted">'+esc(t.start_date||'No start date')+' to '+esc(t.end_date||'No end date')+'</div></div><div class="tags">'+(t.destinations||[]).map(x=>'<span class="tag">'+esc(x)+'</span>').join('')+'</div><button class="btn ghost" style="color:var(--danger)" data-id="'+esc(t.id)+'" onclick="deleteTrip(this.dataset.id)">Delete</button></div>').join(''):'<div class="empty"><h3>No trips yet</h3>Add destinations in Explore, then save your first trip.</div>'
+  }catch(e){toast(e.message,1)}}
+async function loadRec(){
+  if(!token){$('#rec-list').innerHTML='<div class="empty"><h3>Log in for personal picks</h3>We match places to the interests you chose when you registered.<br><br><button class="btn dark" onclick="openAuth()">Log in</button></div>';return}
+  try{
+    const d=await api('/recommendations'),l=Array.isArray(d)?d:(d.recommendations||[]);
+    $('#rec-list').innerHTML=l.length?l.map(card).join(''):'<div class="empty"><h3>No picks yet</h3>Register with a few interests to get suggestions.</div>'
+  }catch(e){toast(e.message,1)}}
+
+document.querySelectorAll('.searchbar input').forEach(i=>i.addEventListener('search',searchDest));
+renderUser();renderBasket();
+api('/destinations').then(l=>{allDest=l;buildFilters()}).catch(()=>{}).finally(searchDest);
+</script>
+</body>
+</html>

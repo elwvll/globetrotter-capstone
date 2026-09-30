@@ -9,6 +9,7 @@ app = Flask(__name__)
 SECRET = os.environ.get("SECRET_KEY", "globetrotter-secret-change-in-prod")
 INTERNAL_KEY = os.environ.get("INTERNAL_KEY", "internal-dev-key")
 AUTH_URL = os.environ.get("AUTH_URL", "http://localhost:5001")
+REQUEST_TIMEOUT = int(os.environ.get("REQUEST_TIMEOUT", 3))
 DATA_DIR = os.environ.get("DATA_DIR", os.path.join(os.path.dirname(os.path.abspath(__file__)), "data"))
 DEST_FILE = os.path.join(DATA_DIR, "destinations.json")
 
@@ -72,7 +73,7 @@ def recommendations():
     # Inter-service communication: ask the auth service for this user's interests
     try:
         resp = requests.get(f"{AUTH_URL}/internal/users/{username}",
-                            headers={"X-Internal-Key": INTERNAL_KEY}, timeout=3)
+                            headers={"X-Internal-Key": INTERNAL_KEY}, timeout=REQUEST_TIMEOUT)
     except requests.exceptions.RequestException:
         return jsonify({"error": "auth service unavailable, try again later"}), 503
     if resp.status_code == 404:

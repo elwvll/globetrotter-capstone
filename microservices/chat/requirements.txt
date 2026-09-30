@@ -3,3 +3,4 @@ Werkzeug==2.3.7
 PyJWT==2.8.0
 Flask-SocketIO==5.3.6
 simple-websocket==1.0.0
+gunicorn==22.0.0

@@ -12,7 +12,8 @@ SERVICES = {
     "itineraries": os.environ.get("ITINERARIES_URL", "http://localhost:5003"),
     "chat": os.environ.get("CHAT_URL", "http://localhost:5004"),
 }
-TIMEOUT = 5
+TIMEOUT = int(os.environ.get("REQUEST_TIMEOUT", 5))
+HEALTH_TIMEOUT = int(os.environ.get("HEALTH_TIMEOUT", 2))
 
 
 def forward(service, path):
@@ -32,6 +33,13 @@ def forward(service, path):
 @app.route("/")
 def home():
     return app.send_static_file("index.html")
+
+
+@app.route("/config")
+def config():
+    """Tell the browser where the chat service lives (own URL on the cloud, port 5004 locally)."""
+    chat_url = os.environ.get("CHAT_PUBLIC_URL") or f"{request.scheme}://{request.host.split(':')[0]}:5004"
+    return jsonify({"chat_url": chat_url}), 200
 
 
 @app.route("/chat")
@@ -74,7 +82,7 @@ def health():
     report = {}
     for name, base in SERVICES.items():
         try:
-            ok = requests.get(f"{base}/health", timeout=2).status_code == 200
+            ok = requests.get(f"{base}/health", timeout=HEALTH_TIMEOUT).status_code == 200
         except requests.exceptions.RequestException:
             ok = False
         report[name] = "up" if ok else "down"

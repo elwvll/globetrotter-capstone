@@ -59,8 +59,12 @@ let sock,cur='',labels={};
 if(!token){
   $('#app').innerHTML='<div class="gate"><h1 style="font-family:var(--serif)">Log in to chat</h1><p>Chat is for registered travelers.</p><a href="/">Go to login</a></div>';
 }else{
-  // The chat service runs on its own port (5004); the browser connects to it directly.
-  sock=io(location.protocol+'//'+location.hostname+':5004',{auth:{token}});
+  // The browser connects straight to the chat service; /config says where it is.
+  fetch('/config').then(r=>r.json()).then(c=>start(c.chat_url)).catch(()=>start(location.protocol+'//'+location.hostname+':5004'));
+}
+
+function start(url){
+  sock=io(url,{auth:{token}});
   sock.on('connect',()=>{$('#dot').classList.add('ok');$('#st').textContent='Connected as '+me;if(cur)join(cur)});
   sock.on('disconnect',()=>{$('#dot').classList.remove('ok');$('#st').textContent='Disconnected, retrying...';$('#t').disabled=$('#b').disabled=true});
   sock.on('connect_error',()=>{$('#st').textContent='Cannot connect. Log in again or check the chat service.'});

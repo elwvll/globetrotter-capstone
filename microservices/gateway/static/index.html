@@ -58,7 +58,7 @@ input[type=range]{accent-color:var(--teal);width:180px}
 .count{color:var(--muted);font-size:.92rem}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px}
 .dest{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-.cover{height:120px;padding:14px;display:flex;justify-content:space-between;align-items:flex-start;color:#fff;font-size:.82rem;font-weight:700}
+.cover{height:170px;padding:14px;display:flex;justify-content:space-between;align-items:flex-start;color:#fff;font-size:.82rem;font-weight:700}
 .cover span{background:rgba(0,0,0,.28);padding:3px 10px;border-radius:999px}
 .dbody{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
 .dbody h3{font-family:var(--serif);font-size:1.4rem;margin:0}
@@ -249,7 +249,7 @@ function logout(silent){
 /* destinations */
 function card(x){
   const d=typeof x==='string'?{name:x}:x,t=(d.tags||[])[0]||'',g=GRAD[t]||['#1e3a5f','#6f95c9'],inb=basket.includes(d.name);
-  return '<article class="dest"><div class="cover" style="background:linear-gradient(135deg,'+g[0]+','+g[1]+')"><span>'+esc(d.continent||d.country||'')+'</span>'+
+  return '<article class="dest"><div class="cover" style="background:'+(d.image?'linear-gradient(180deg,rgba(0,0,0,.35),transparent 45%,rgba(0,0,0,.3)),url('+esc(d.image)+') center/cover,':'')+'linear-gradient(135deg,'+g[0]+','+g[1]+')"><span>'+esc(d.continent||d.country||'')+'</span>'+
   (d.avg_cost_per_day!=null?'<span>'+fcfa(d.avg_cost_per_day)+'</span>':'')+'</div><div class="dbody"><h3>'+esc(d.name)+'</h3><p>'+esc(d.description||'')+'</p><div class="tags">'+
   (d.tags||[]).map(t=>'<span class="tag">'+esc(t)+'</span>').join('')+'</div><div class="dfoot"><div class="price">'+
   (d.avg_cost_per_day!=null?fcfa(d.avg_cost_per_day)+' <small>/ day</small>':'')+'</div><button class="add'+(inb?' in':'')+'" data-n="'+esc(d.name)+'" onclick="toggleBasket(this.dataset.n)">'+(inb?'Added':'Add to trip')+'</button></div></div></article>'}
